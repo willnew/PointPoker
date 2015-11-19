@@ -1,0 +1,24 @@
+{
+  "name": "pointPoker",
+  "version": "0.0.0",
+  "description": "Simple point poker for dev team",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "express": "^4.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"老子不得写\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/willnew/PointPoker.git"
+  },
+  "author": "wliu",
+  "homepage": "https://github.com/willnew/PointPoker",
+  "engines" : {
+    "node" : "0.12.x"
+  }
+}
