@@ -1,0 +1,9 @@
+{
+  "expr": true,
+  "laxbreak": true,
+  "laxcomma": true,
+  "esnext": true,
+  "strict": "global",
+  "globalstrict": true,
+  "undef": "global"
+}
