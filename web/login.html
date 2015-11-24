@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+<body>
+  
+  <div>
+    <label>name<input id="input_name" type="text"></label>
+  </div>
+  <div>
+    <button id="btn_login">login</button>
+  </div>
+
+  <script src="scripts/lib/jquery-2.1.4.min.js"></script>
+  <script>
+    $('#btn_login').click(function() {
+      var userName = $('#input_name').val();
+      $.ajax({
+        url: '/rest/login',
+        method: 'POST',
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify({
+          name: userName
+        })
+        }).done(function() {
+          var ws = new WebSocket('ws://localhost:10086');
+          ws.send("hello");
+        });
+    });
+  </script>  
+</body>
+</html>
