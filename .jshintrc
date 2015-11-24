@@ -5,5 +5,5 @@
   "esnext": true,
   "strict": "global",
   "globalstrict": true,
-  "undef": "global"
+  "undef": "true"
 }
