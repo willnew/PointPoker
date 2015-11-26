@@ -9,17 +9,18 @@ var bodyParser = require('body-parser');
 var app = express();
 var httpServer = require('http').Server(app);
 var wss = new (require('ws').Server)({ server: httpServer });
+var sessionHandler = session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'keyboard cat'
+});
 
 app.set('serverIp', 'localhost');
 app.set('port', 10086);
 app.use('/', express.static(path.join(__dirname, 'web')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: 'keyboard cat'
-}));
+app.use(sessionHandler);
 
 // variables
 var POINTS = path.join(__dirname, 'data.json');
@@ -49,8 +50,10 @@ app.post('/rest/login', function(req, res) {
 });
 
 // Websocket
-wss.on('connection', function(ws) {
-  console.log(ws.upgradeReq);
+wss.on('connection', function(socket) {
+  sessionHandler(socket.upgradeReq, {}, function(err) {
+    console.log(socket.upgradeReq.session);
+  });
 });
 
 // broadcast server IP
