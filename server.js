@@ -1,15 +1,36 @@
+'use strict';
+/* globals require */
+/* globals __dirname */
+/* globals console */
+/* globals process */
+
 // import libs
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
-var bodyParser = require('body-parser');
-
 var app = express();
+var bodyParser = require('body-parser');
+var httpServer = require('http').Server(app);
+var session = require('express-session');
+var sessionHandler = session({
+  resave: true,
+  saveUninitialized: true,
+  secret: 'keyboard cat'
+});
+var HallOfEchos = require('./src/main/module/HallOfEchos');
+var hallOfEchos = new HallOfEchos({
+  server: httpServer,
+  sessionHandler: sessionHandler
+});
+
 app.set('serverIp', 'localhost');
 app.set('port', 10086);
 app.use('/', express.static(path.join(__dirname, 'web')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(sessionHandler);
+
+hallOfEchos.reverberate();
 
 // variables
 var POINTS = path.join(__dirname, 'data.json');
