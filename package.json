@@ -28,6 +28,6 @@
   "author": "wliu",
   "homepage": "https://github.com/willnew/PointPoker",
   "engines": {
-    "node": "5.0.x"
+    "node": ">5.0.x"
   }
 }
