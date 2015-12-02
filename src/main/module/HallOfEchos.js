@@ -9,7 +9,7 @@
 
 var WebSocketServer = require('ws').Server;
 
-module.exports = class HallOfMessage {
+module.exports = class HallOfEchos {
   /**
    * @param {Object} options
    * @param {Object} options.server
