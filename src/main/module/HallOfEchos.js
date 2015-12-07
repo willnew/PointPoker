@@ -8,6 +8,7 @@
 /* globals require */
 
 var WebSocketServer = require('ws').Server;
+var rx = require('rx');
 
 module.exports = class HallOfEchos {
   /**
@@ -17,19 +18,23 @@ module.exports = class HallOfEchos {
    * */
   constructor(options) {
     this.wss = new WebSocketServer({ server: options.server });
-    this.sessionHandler = options.sessionHandler;
+    this.sessionHandler = rx.Observable.fromCallback(options.sessionHandler);
   }
 
   reverberate() {
-    this.wss.on('connection', (function(socket) {
-      this.sessionHandler(socket.upgradeReq, {}, function(req) {
-        let session = req.session;
-        // TODO: Generate attendee.
-      });
+    rx.Observable
+      .fromEvent(this.wss, 'connection')
+      .forEach(socket => 
+        this.sessionHandler(socket.upgradeReq, {})
+          .subscribe(req => this.contactWithClient(socket, req.session))
+      );
+    return this;
+  }
 
-      let attendee;
-      socket.on('message', (function(event) {
-        let payload = JSON.parse(event.data);
+  contactWithClient(socket, session) {
+    rx.Observable.fromEvent(socket, 'message')
+      .map(event => JSON.parse(event.data))
+      .forEach(payload => {
         switch(payload.type) {
           case 'CREATE_GAME':
             break;
@@ -40,9 +45,6 @@ module.exports = class HallOfEchos {
           case 'FLIP':
             break;
         }
-      }).bind(this));
-
-    }).bind(this));
-    return this;
+      });
   }
 };
