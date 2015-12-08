@@ -9,6 +9,8 @@
 
 var WebSocketServer = require('ws').Server;
 var rx = require('rx');
+var AttendeeFactory = require('../domain/AttendeeFactory');
+var Game = require('../domain/Game');
 
 module.exports = class HallOfEchos {
   /**
@@ -26,12 +28,12 @@ module.exports = class HallOfEchos {
       .fromEvent(this.wss, 'connection')
       .forEach(socket => 
         this.sessionHandler(socket.upgradeReq, {})
-          .subscribe(req => this.contactWithClient(socket, req.session))
+          .subscribe(req => this.handleMessage(socket, req.session))
       );
     return this;
   }
 
-  contactWithClient(socket, session) {
+  handleMessage(socket, session) {
     rx.Observable.fromEvent(socket, 'message')
       .map(event => JSON.parse(event.data))
       .forEach(payload => {
@@ -46,5 +48,15 @@ module.exports = class HallOfEchos {
             break;
         }
       });
+  }
+
+  /**
+   * @param {Object} user
+   * @param {String} user.name
+   * @param {String} user.role
+   * */
+  static createGame(user) {
+    let game = new Game();
+    let attendee = AttendeeFactory.create(user);
   }
 };
