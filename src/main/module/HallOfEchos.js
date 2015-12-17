@@ -1,11 +1,17 @@
 'use strict';
 
-/**
- * This is the Hall of echos, ear of the dragon, tongue of the lord...
- * */
-
 /* globals module */
 /* globals require */
+
+/**
+ * This is the Hall of echos, ear of the dragon, tongue of the lord...
+ *
+ * Protocal:
+ *  transfer format: JSON
+ *  @example {
+ *   type: 'CREATE_GAME'
+ *  }
+ * */
 
 var WebSocketServer = require('ws').Server;
 var rx = require('rx');
@@ -20,14 +26,13 @@ module.exports = class HallOfEchos {
    * */
   constructor(options) {
     this.wss = new WebSocketServer({ server: options.server });
-    this.sessionHandler = rx.Observable.fromCallback(options.sessionHandler);
+    this.parseSession = rx.Observable.fromCallback(options.sessionHandler);
   }
 
   reverberate() {
     rx.Observable
       .fromEvent(this.wss, 'connection')
-      .forEach(socket => 
-        this.sessionHandler(socket.upgradeReq, {})
+      .forEach(socket => this.parseSession(socket.upgradeReq, {})
           .subscribe(req => this.handleMessage(socket, req.session))
       );
     return this;
