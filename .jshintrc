@@ -5,5 +5,11 @@
   "esnext": true,
   "strict": "global",
   "globalstrict": true,
-  "undef": "true"
+  "undef": "true",
+  "predef": [
+    "module", 
+    "require",
+    "describe", 
+    "it" 
+  ]
 }

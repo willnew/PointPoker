@@ -1,9 +1,6 @@
 'use strict';
 
-/* globals describe */
-/* globals it */
-/* globals require */
-
+var should = require('should');
 var AttendeeFactory = require('../../main/domain/AttendeeFactory');
 var Player = require('../../main/domain/Attendee');
 var Observer = require('../../main/domain/Observer');

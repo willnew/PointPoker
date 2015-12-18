@@ -1,10 +1,10 @@
 'use strict';
 
-/* globals module */
+var shortid = require('shortid');
 
 module.exports = class Game {
   constructor() {
-    // create id.
-    // create attendee list.
+    this.id = shortid.generate();
+    this.attendees = [];
   }
 };

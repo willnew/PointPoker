@@ -1,8 +1,5 @@
 'use strict';
 
-/* globals module */
-/* globals require */
-
 /**
  * This is the Hall of echos, ear of the dragon, tongue of the lord...
  *

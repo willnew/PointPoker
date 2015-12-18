@@ -1,8 +1,5 @@
 'use strict';
 
-/* globals require */
-/* globals module */
-
 var Player = require('./Player');
 var Observer = require('./Observer');
 
