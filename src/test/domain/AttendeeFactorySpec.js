@@ -1,9 +1,11 @@
 'use strict';
 
-var should = require('should');
+const chai = require('chai');
 var AttendeeFactory = require('../../main/domain/AttendeeFactory');
 var Player = require('../../main/domain/Attendee');
 var Observer = require('../../main/domain/Observer');
+
+chai.should();
 
 describe('{AttendeeFactory}', () => {
   describe('#create', () => {

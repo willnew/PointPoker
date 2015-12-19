@@ -10,6 +10,8 @@
     "module", 
     "require",
     "describe", 
-    "it" 
+    "it",
+    "beforeEach",
+    "afterEach"
   ]
 }

@@ -1,7 +1,11 @@
 'use strict';
 
-var should = require('should');
-var Game = require('../../main/domain/Game.js');
+const chai = require('chai');
+const Game = require('../../main/domain/Game');
+const Player = require('../../main/domain/Player');
+const sinon = require('sinon');
+
+chai.should();
 
 describe('{Game}', () => {
   describe('#constructe', () => {
@@ -9,12 +13,31 @@ describe('{Game}', () => {
       var game = new Game();
       game.id.should.match(/.{8}/);
     });
+
+    it('should subscribe \'add\' event');
   });
 
-  describe('#addAttendee', () => {
-    it('should add the attendee to the attendee list');
+  describe('#add', () => {
+    var game, player;
+    beforeEach(() => {
+      game = new Game();
+      player = new Player({ name: 'crusoe' }); 
+    });
 
-    it('should subscribe the \'change\' event on the attendee');
+    it('should add the attendee to the attendee list', () => {
+      game.add(player);
+      game.attendees.should.not.be.empty;
+      game.attendees[0].name.should.be.equal('crusoe');
+    });
+
+    it('should subscribe the \'change\' event on the attendee', () => {
+      sinon.spy(game, 'onAttendeeChanged');
+      game.add(player);
+      player.emit('change');
+      game.onAttendeeChanged.calledOnce.should.be.true;
+    });
+
+    it('should emit \'add\' event');
   });
 
   describe('#removeAttendee', () => {
