@@ -8,6 +8,13 @@ class Attendee {
     EventEmitter.call(this);
     this.name = user.name;
   }
+
+  /**
+   * @param {String} type - join|leave|vote|clear
+   * */
+  message(type, data) {
+
+  }
 }
 
 util.inherits(Attendee, EventEmitter);

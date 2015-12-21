@@ -37,7 +37,16 @@ describe('{Game}', () => {
       game.onAttendeeChanged.calledOnce.should.be.true;
     });
 
-    it('should emit \'add\' event');
+    it('should message each attendee in the list about the new participant', () => {
+      var existingPlayer = new Player({ name: 'vickie' });
+      var spyMessage = sinon.spy(existingPlayer, 'message');
+      game.add(existingPlayer);
+      spyMessage.calledOnce.should.be.false;
+      game.add(player);
+      spyMessage.calledOnce.should.be.true;
+      spyMessage.getCall(0).args[0].should.be.equal('add');
+      spyMessage.getCall(0).args[1].should.be.equal(player);
+    });
   });
 
   describe('#removeAttendee', () => {

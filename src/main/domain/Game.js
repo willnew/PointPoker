@@ -3,6 +3,7 @@
 const shortid = require('shortid');
 const EventEmitter = require('events');
 const util = require('util');
+const Rx = require('rx');
 
 class Game {
   constructor() {
@@ -17,8 +18,9 @@ class Game {
    * @param {Attendee} attendee
    * */
   add(attendee) {
-    this.attendees.push(attendee);
     attendee.on('change', this.onAttendeeChanged.bind(this));
+    Rx.Observable.from(this.attendees).forEach(a => a.message('add', attendee));
+    this.attendees.push(attendee);
   }
 
   onAttendeeChanged() {
