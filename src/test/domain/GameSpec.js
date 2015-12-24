@@ -13,8 +13,6 @@ describe('{Game}', () => {
       var game = new Game();
       game.id.should.match(/.{8}/);
     });
-
-    it('should subscribe \'add\' event');
   });
 
   describe('#add', () => {
@@ -49,9 +47,27 @@ describe('{Game}', () => {
     });
   });
 
-  describe('#removeAttendee', () => {
-    it('should remove the attendee from the attendee list');
+  describe('#remove', () => {
+    var game, player1, player2;
+
+    beforeEach(() => {
+      game = new Game();
+      player1 = new Player({ name: 'crusoe' });
+      game.add(player1);
+      player2 = new Player({ name: 'vickie' });
+      game.add(player2);
+    });
+
+    it('should remove the attendee from the attendee list if pass in the attendee', () => {
+      game.remove(player1);
+      game.attendees.length.should.be.equal(1);
+      game.attendees.indexOf(player1).should.be.equal(-1);
+    });
+
+    it('should remove the attendeee if pass in the attendee\'s id');
 
     it('should cancel subscribe event on the attendee');
+
+    it('should be destroyed if all of the attendee have been removed');
   });
 });
