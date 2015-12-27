@@ -21,6 +21,12 @@ describe('{Attendee}', function() {
       attendee.emit('change');
       callback.calledOnce.should.be.true;
     });
+
+    it('should have an id for each instance', () => {
+      var atd = new Attendee({ name: 'c' });
+      atd.should.have.property('id');
+      atd.id.should.be.match(/.{8}/);
+    });
   });
 
   describe('#toJSON', () => {

@@ -29,10 +29,10 @@ describe('{Game}', () => {
     });
 
     it('should subscribe the \'change\' event on the attendee', () => {
-      sinon.spy(game, 'onAttendeeChanged');
+      sinon.spy(game, 'broadcastAttendeeChanged');
       game.add(player);
       player.emit('change');
-      game.onAttendeeChanged.calledOnce.should.be.true;
+      game.broadcastAttendeeChanged.calledOnce.should.be.true;
     });
 
     it('should message each attendee in the list about the new participant', () => {
@@ -64,10 +64,59 @@ describe('{Game}', () => {
       game.attendees.indexOf(player1).should.be.equal(-1);
     });
 
-    it('should remove the attendeee if pass in the attendee\'s id');
+    it('should remove the attendeee if pass in the attendee\'s id', () => {
+      game.remove(player1.id);
+      game.attendees.length.should.be.equal(1);
+      game.attendees.indexOf(player1).should.be.equal(-1);
+    });
 
-    it('should cancel subscribe event on the attendee');
+    it('should cancel subscribe event on the attendee', () => {
+      player1.removeAllListeners = sinon.spy(player1.removeAllListeners);
+      game.remove(player1);
+      player1.removeAllListeners.calledOnce.should.be.true;
+      player1.removeAllListeners.calledWith('change').should.be.true;
+    });
 
     it('should be destroyed if all of the attendee have been removed');
+  });
+
+  describe('#find', () => {
+    var game, player1, player2;
+
+    beforeEach(() => {
+      game = new Game();
+      player1 = new Player({ name: 'c' });
+      player2 = new Player({ name: 'v' });
+      game.add(player1);
+      game.add(player2);
+    });
+
+    it('should find the attendee by giving attendee\'s id', () => {
+      game.find(player1.id).should.be.equal(player1);
+      game.find(player2.id).should.be.equal(player2);
+    });
+  });
+
+  describe('#broadcastAttendeeChanged', () => {
+    let game, p1, p2, p3;
+    beforeEach(() => {
+      game = new Game();
+      p1 = new Player({name: 'c'});
+      p2 = new Player({name: 'v'});
+      p3 = new Player({name: 'g'});
+      game.add(p1).add(p2).add(p3);
+    });
+
+    it('should message each attendee for the changes', () => {
+      p1.message = sinon.spy(p1, 'message');
+      p2.message = sinon.spy(p2, 'message');
+      p3.message = sinon.spy(p3, 'message');
+
+      let message = { id: p3.id };
+      p3.emit('change', message);
+      p1.message.calledWith(message).should.be.true;
+      p2.message.calledWith(message).should.be.true;
+      p3.message.calledWith(message).should.be.false;
+    });
   });
 });
